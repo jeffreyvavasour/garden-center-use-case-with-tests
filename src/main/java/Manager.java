@@ -21,14 +21,6 @@ public class Manager extends GardenCenterEmployee {
             return resultMsg;
         }
 
-//        if (!super.getProductInventory().contains(newProduct)) {
-//            super.getProductInventory().add(newProduct);
-//            resultMsg = "Product added to inventory";
-//            System.out.println(resultMsg);
-//            System.out.println(getProductInventory());
-//            return resultMsg;
-//        }
-
         resultMsg = "Product already exists";
         System.out.println(resultMsg);
         return resultMsg;
