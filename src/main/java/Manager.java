@@ -47,8 +47,9 @@ public class Manager extends GardenCenterEmployee {
 
     public void manageProducts() {
 
-        // get product name from user
         Scanner sc = new Scanner(System.in);
+
+        // get product name from user
         System.out.print("Search product name: ");
         String productName = sc.nextLine();
 
@@ -56,75 +57,36 @@ public class Manager extends GardenCenterEmployee {
         currentProduct = productSearch(productName);
         System.out.println(currentProduct);
 
-        // if product is found get input to either edit, remove or order product
+        // if product is found
         if (currentProduct != null) {
             int userInput = 0;
-            System.out.println("Please choose a number for what to do");
-            System.out.println("1 = edit product");
-            System.out.println("2 = remove product");
-            System.out.println("3 = order product");
-            System.out.println("4 = quit product management");
+
+            // get input to either edit, remove, order product or quit
+            printManageMessage();
             userInput = sc.nextInt();
             sc.nextLine();
 
-            // get input to either edit name, desc, category, price or quantity
+            // user wants to edit
             if (userInput == 1) {
 
                 boolean flag = true;
                 while (flag) {
                     int userInput2;
-                    System.out.println("Please choose a number for what to do");
-                    System.out.println("1 = edit product name");
-                    System.out.println("2 = edit product description");
-                    System.out.println("3 = edit product category");
-                    System.out.println("4 = edit product price");
-                    System.out.println("5 = edit product quantity");
-                    System.out.println("6 = quit editing product");
+
+                    // get input to edit name, desc, category, price or quantity
+                    printEditMessage();
                     userInput2 = sc.nextInt();
                     sc.nextLine();
 
-                    // edit name
-                    if (userInput2 == 1) {
-                        System.out.println("Enter new product name");
-                        currentProduct.setName(sc.nextLine().toLowerCase());
-                        System.out.println("Name updated successfully!");
-                        System.out.println();
-                    }
-                    // edit desc
-                    if (userInput2 == 2) {
-                        System.out.println("Enter new product description");
-                        currentProduct.setDescription(sc.nextLine().toLowerCase());
-                        System.out.println("Description updated successfully!");
-                        System.out.println();
-                    }
-                    // edit category
-                    if (userInput2 == 3) {
-                        System.out.println("Enter new product category");
-                        currentProduct.setCategory(sc.nextLine().toLowerCase());
-                        System.out.println("Category updated successfully!");
-                        System.out.println();
-                    }
-                    // edit price
-                    if (userInput2 == 4) {
-                        System.out.println("Enter new product price to 2 decimal places (eg. 2.74)");
-                        currentProduct.setPrice(sc.nextDouble());
-                        System.out.println("Price updated successfully!");
-                        System.out.println();
-                    }
-                    // edit quantity
-                    if (userInput2 == 5) {
-                        System.out.println("Enter new product quantity");
-                        currentProduct.setQuantity(sc.nextInt());
-                        sc.nextLine();
-                        System.out.println("Quantity updated successfully!");
-                        System.out.println();
-                    }
+                    // give option based on user input
+                    // and edit product
+                    editProduct(userInput2, currentProduct);
+
                     // quit editing
                     if (userInput2 == 6) {
                         flag = false;
                     }
                 }
-
             }
 
             // remove product
@@ -157,20 +119,33 @@ public class Manager extends GardenCenterEmployee {
 
             // add product
             if (userInput == 1) {
+
+                int id;
+                String name;
+                String description;
+                String category;
+                double price;
+                int quantity;
+
                 //get user input on product info
                 System.out.println("Create product ID (an integer)");
-                int id = sc.nextInt();
+                id = sc.nextInt();
                 sc.nextLine();
+
                 System.out.println("Enter product name");
-                String name = sc.nextLine();
+                name = sc.nextLine();
+
                 System.out.println("Enter product description");
-                String description = sc.nextLine();
+                description = sc.nextLine();
+
                 System.out.println("Enter product category");
-                String category = sc.nextLine();
+                category = sc.nextLine();
+
                 System.out.println("Enter product price (to 2 decimal places)");
-                double price = sc.nextDouble();
+                price = sc.nextDouble();
+
                 System.out.println("Enter product quantity");
-                int quantity = sc.nextInt();
+                quantity = sc.nextInt();
                 sc.nextLine();
 
                 // add product to inventory
@@ -184,5 +159,66 @@ public class Manager extends GardenCenterEmployee {
             }
         }
     }
+
+    public void printManageMessage() {
+        System.out.println("Please choose a number for what to do");
+        System.out.println("1 = edit product");
+        System.out.println("2 = remove product");
+        System.out.println("3 = order product");
+        System.out.println("4 = quit product management");
+    }
+
+    public void printEditMessage() {
+        System.out.println("Please choose a number for what to do");
+        System.out.println("1 = edit product name");
+        System.out.println("2 = edit product description");
+        System.out.println("3 = edit product category");
+        System.out.println("4 = edit product price");
+        System.out.println("5 = edit product quantity");
+        System.out.println("6 = quit editing product");
+    }
+
+    public void editProduct(int userInput2, Product currentProduct) {
+
+        Scanner sc = new Scanner(System.in);
+
+        // edit name
+        if (userInput2 == 1) {
+            System.out.println("Enter new product name");
+            currentProduct.setName(sc.nextLine().toLowerCase());
+            System.out.println("Name updated successfully!");
+            System.out.println();
+        }
+        // edit desc
+        if (userInput2 == 2) {
+            System.out.println("Enter new product description");
+            currentProduct.setDescription(sc.nextLine().toLowerCase());
+            System.out.println("Description updated successfully!");
+            System.out.println();
+        }
+        // edit category
+        if (userInput2 == 3) {
+            System.out.println("Enter new product category");
+            currentProduct.setCategory(sc.nextLine().toLowerCase());
+            System.out.println("Category updated successfully!");
+            System.out.println();
+        }
+        // edit price
+        if (userInput2 == 4) {
+            System.out.println("Enter new product price to 2 decimal places (eg. 2.74)");
+            currentProduct.setPrice(sc.nextDouble());
+            System.out.println("Price updated successfully!");
+            System.out.println();
+        }
+        // edit quantity
+        if (userInput2 == 5) {
+            System.out.println("Enter new product quantity");
+            currentProduct.setQuantity(sc.nextInt());
+            sc.nextLine();
+            System.out.println("Quantity updated successfully!");
+            System.out.println();
+        }
+    }
+
 }
 

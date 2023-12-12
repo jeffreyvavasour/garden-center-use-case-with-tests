@@ -23,7 +23,6 @@ public class GardenCenterEmployee extends User{
             }
         }
 
-        System.out.println("Product not found!");
         return null;
     }
 
