@@ -8,6 +8,10 @@ public class Manager extends GardenCenterEmployee {
         super(firstName, lastName, phoneNumber, emailAddress);
     }
 
+    public Product getCurrentProduct() {
+        return currentProduct;
+    }
+
     public String addProduct(int productID, String name, String description, String category, double price, int quantity) {
 
         Product newProduct = new Product(productID, name, description, category, price, quantity);
