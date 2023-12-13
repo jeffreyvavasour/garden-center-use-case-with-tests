@@ -12,7 +12,7 @@ class GardenCenterEmployeeTest {
     @ValueSource(strings = { "chainsaw 505" })
     void productIsFound(String productName) {
 
-        // create manager object
+        // create GardenCenterEmployee object
         GardenCenterEmployee gardenCenterEmployeeUnderTest = new GardenCenterEmployee("jeff", "vava", "0831856498","jeffreyvavasour@gmail.com");
         // create product array
         ArrayList<Product> productArray = gardenCenterEmployeeUnderTest.getProductInventory();
