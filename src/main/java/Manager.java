@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Manager extends GardenCenterEmployee {
@@ -36,128 +37,6 @@ public class Manager extends GardenCenterEmployee {
         System.out.println();
 
         return msg;
-    }
-
-    @Override
-    public String toString() {
-        return "Manager{" +
-                "currentProduct=" + currentProduct +
-                "} " + super.toString();
-    }
-
-    public void manageProducts() {
-
-        Scanner sc = new Scanner(System.in);
-
-        // get product name from user
-        System.out.print("Search product name: ");
-        String productName = sc.nextLine();
-
-        // sets current product to the product found or null
-        currentProduct = productSearch(productName);
-        System.out.println(currentProduct);
-
-        // if product is found
-        if (currentProduct != null) {
-            int userInput = 0;
-
-            // get input to either edit, remove, order product or quit
-            printManageMessage();
-            userInput = sc.nextInt();
-            sc.nextLine();
-
-            // user wants to edit
-            if (userInput == 1) {
-
-                boolean flag = true;
-                while (flag) {
-                    int userInput2;
-
-                    // get input to edit name, desc, category, price or quantity
-                    printEditMessage();
-                    userInput2 = sc.nextInt();
-                    sc.nextLine();
-
-                    // give option based on user input
-                    // and edit product
-                    editProduct(userInput2, currentProduct);
-
-                    // quit editing
-                    if (userInput2 == 6) {
-                        flag = false;
-                    }
-                }
-            }
-
-            // remove product
-            if (userInput == 2) {
-                System.out.println("Product removed from inventory");
-                removeProduct(currentProduct);
-            }
-
-            // order product
-            if (userInput == 3) {
-                orderProduct();
-            }
-
-            // quit product management
-            if (userInput == 4) {
-                System.out.println("Quitting project management");
-                return;
-            }
-        }
-
-        // if product is not found get input to either add product or quit product management
-        if (currentProduct == null) {
-            int userInput;
-            System.out.println("Product was not found...");
-            System.out.println("Please choose a number for what to do");
-            System.out.println("1. add product");
-            System.out.println("2. quit product management");
-            userInput = sc.nextInt();
-            sc.nextLine();
-
-            // add product
-            if (userInput == 1) {
-
-                int id;
-                String name;
-                String description;
-                String category;
-                double price;
-                int quantity;
-
-                //get user input on product info
-                System.out.println("Create product ID (an integer)");
-                id = sc.nextInt();
-                sc.nextLine();
-
-                System.out.println("Enter product name");
-                name = sc.nextLine();
-
-                System.out.println("Enter product description");
-                description = sc.nextLine();
-
-                System.out.println("Enter product category");
-                category = sc.nextLine();
-
-                System.out.println("Enter product price (to 2 decimal places)");
-                price = sc.nextDouble();
-
-                System.out.println("Enter product quantity");
-                quantity = sc.nextInt();
-                sc.nextLine();
-
-                // add product to inventory
-                addProduct(id, name, description, category, price, quantity);
-            }
-
-            // quit product management
-            if (userInput == 2) {
-                System.out.println("Quitting project management");
-                return;
-            }
-        }
     }
 
     public void printManageMessage() {
@@ -205,18 +84,221 @@ public class Manager extends GardenCenterEmployee {
         }
         // edit price
         if (userInput2 == 4) {
-            System.out.println("Enter new product price to 2 decimal places (eg. 2.74)");
-            currentProduct.setPrice(sc.nextDouble());
+            // guarantee number is an int
+            double price = 0;
+            do {
+                try {
+                    // Get input
+                    System.out.println("Enter new product price to 2 decimal places (eg. 2.74)");
+                    price = sc.nextDouble();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input");
+                }
+                sc.nextLine(); // clears the buffer
+            } while (price < 0.01);
+
+            currentProduct.setPrice(price);
             System.out.println("Price updated successfully!");
             System.out.println();
         }
         // edit quantity
         if (userInput2 == 5) {
-            System.out.println("Enter new product quantity");
-            currentProduct.setQuantity(sc.nextInt());
-            sc.nextLine();
+            // guarantee number is a positive int
+            int quantity = -1;
+            do {
+                try {
+                    // Get input
+                    System.out.println("Enter new product quantity");
+                    quantity = sc.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input");
+                }
+                sc.nextLine(); // clears the buffer
+            } while (quantity < 0);
+
+            currentProduct.setQuantity(quantity);
             System.out.println("Quantity updated successfully!");
             System.out.println();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "currentProduct=" + currentProduct +
+                "} " + super.toString();
+    }
+
+    public void manageProducts() {
+
+        Scanner sc = new Scanner(System.in);
+
+        // get product name from user
+        System.out.print("Search product name: ");
+        String productName = sc.nextLine();
+
+        // sets current product to the product found or null
+        currentProduct = productSearch(productName);
+        System.out.println(currentProduct);
+
+        // if product is found
+        if (currentProduct != null) {
+            int userInput = 0;
+
+            // get input to edit, remove, order product or quit
+            // guarantee number is an int between 1 and 4
+            do {
+                try {
+                    // Get input
+                    printManageMessage();
+                    userInput = sc.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input");
+                }
+                sc.nextLine(); // clears the buffer
+            } while (userInput <= 0 || userInput > 4);
+
+            // user wants to edit
+            if (userInput == 1) {
+
+                boolean flag = true;
+                while (flag) {
+                    int userInput2 = 0;
+
+                    // get input to edit name, desc, category, price or quantity
+                    // guarantee number is an int between 1 and 6
+                    do {
+                        try {
+                            // Get input
+                            printEditMessage();
+                            userInput2 = sc.nextInt();
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid input");
+                        }
+                        sc.nextLine(); // clears the buffer
+                    } while (userInput <= 0 || userInput > 6);
+
+                    // give option based on user input
+                    // and edit product
+                    editProduct(userInput2, currentProduct);
+
+                    // quit editing
+                    if (userInput2 == 6) {
+                        flag = false;
+                    }
+                }
+            }
+
+            // remove product
+            if (userInput == 2) {
+                System.out.println("Product removed from inventory");
+                removeProduct(currentProduct);
+            }
+
+            // order product
+            if (userInput == 3) {
+                orderProduct();
+            }
+
+            // quit product management
+            if (userInput == 4) {
+                System.out.println("Quitting project management");
+                return;
+            }
+        }
+
+        // if product is not found
+        if (currentProduct == null) {
+            // get input to add product or quit product management
+            System.out.println("Product was not found...");
+            int userInput = 0;
+
+            // guarantee number 1 or 2 is selected
+            do {
+                try {
+                    // Get input
+                    System.out.println("Please choose a number for what to do");
+                    System.out.println("1. add product");
+                    System.out.println("2. quit product management");
+                    userInput = sc.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.print("Invalid input ");
+                }
+                sc.nextLine(); // clears the buffer
+            } while (userInput <= 0);
+
+
+            // add product
+            if (userInput == 1) {
+
+                int id = 0;
+                String name;
+                String description;
+                String category;
+                double price = 0;
+                int quantity = -1;
+
+                // get user input on product info
+                // product ID
+                // guarantee number is a positive int
+                do {
+                    try {
+                        // Get input
+                        System.out.println("Create product ID (a positive integer)");
+                        id = sc.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid input");
+                    }
+                    sc.nextLine(); // clears the buffer
+                } while (id <= 0);
+
+                // name
+                System.out.println("Enter product name");
+                name = sc.nextLine();
+
+                // description
+                System.out.println("Enter product description");
+                description = sc.nextLine();
+
+                // category
+                System.out.println("Enter product category");
+                category = sc.nextLine();
+
+                // price
+                // guarantee number is an int
+                do {
+                    try {
+                        // Get input
+                        System.out.println("Enter product price (to 2 decimal places)");
+                        price = sc.nextDouble();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid input");
+                    }
+                    sc.nextLine(); // clears the buffer
+                } while (price < 0.01);
+
+                // quantity
+                // guarantee number is an int
+                do {
+                    try {
+                        // Get input
+                        System.out.println("Enter product quantity");
+                        quantity = sc.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid input");
+                    }
+                    sc.nextLine(); // clears the buffer
+                } while (quantity < 0);
+
+                // add product to inventory
+                addProduct(id, name, description, category, price, quantity);
+            }
+
+            // quit product management
+            if (userInput == 2) {
+                System.out.println("Quitting project management");
+                return;
+            }
         }
     }
 
